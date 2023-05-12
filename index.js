@@ -25,7 +25,7 @@ puppeteer
     // Wait for security check
     await page.waitForTimeout(5000);
 
-    const info = {};
+    const info = [];
 
     const depsContainer = await page.$$(
       '[class="flex justify-between shadow-1 br2 pa4 h-100"]'
@@ -37,7 +37,7 @@ puppeteer
       );
       const department = await depElem.evaluate((e) => e.innerText);
       const linkDep = await depElem.evaluate((e) => e.href);
-      info[j] = { department: department, url: linkDep, categories: [] };
+      info.push({ department: department, url: linkDep, categories: [] });
 
       const categoryElem = await depsContainer[j].$$(
         '[class="f6 no-underline mid-gray db pv2 underline-hover"]'
@@ -50,6 +50,28 @@ puppeteer
           url: linkCat,
           subcategories: [],
         });
+      }
+    }
+
+    for (let i = 0; i < info.length; i++) {
+      const dep = info[i];
+      for (let j = 0; j < dep.categories.length; j++) {
+        const cat = dep.categories[j];
+        await page.goto(cat.url);
+        await page.waitForTimeout(500);
+
+        const subCatElem = await page.$$(
+          '.dn [link-identifier="Generic Name"]'
+        ); // dn // [class="w_G_Tk w_nk5g mr2"]
+        for (let k = 0; k < subCatElem.length; k++) {
+          const subCat = await subCatElem[k].evaluate((e) => e.innerText);
+          const linkSub = await subCatElem[k].evaluate((e) => e.href);
+
+          info[i].categories[j].subcategories.push({
+            name: subCat,
+            url: linkSub,
+          });
+        }
       }
     }
 
