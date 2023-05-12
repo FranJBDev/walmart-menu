@@ -25,14 +25,7 @@ puppeteer
     // Wait for security check
     await page.waitForTimeout(5000);
 
-    // page.click(
-    //   '[class="flex items-center no-underline ph3 white desktop-header-trigger lh-title b pointer ba b--transparent bg-transparent sans-serif"]'
-    // );
-
-    await page.waitForTimeout(3000);
-
     const info = {};
-    const departments = [];
 
     const depsContainer = await page.$$(
       '[class="flex justify-between shadow-1 br2 pa4 h-100"]'
@@ -42,16 +35,25 @@ puppeteer
       const depElem = await depsContainer[j].$(
         '[class="f3 no-underline black b"]'
       );
-      department = await depElem.evaluate((e) => e.innerText);
-      //   console.log('Departamento', department);
+      const department = await depElem.evaluate((e) => e.innerText);
+      const linkDep = await depElem.evaluate((e) => e.href);
+      info[j] = { department: department, url: linkDep, categories: [] };
+
       const categoryElem = await depsContainer[j].$$(
         '[class="f6 no-underline mid-gray db pv2 underline-hover"]'
       );
       for (let i = 0; i < categoryElem.length; i++) {
         const categorie = await categoryElem[i].evaluate((e) => e.innerText);
-        console.log('Departamento', department, 'Categoria: ', categorie);
+        const linkCat = await categoryElem[i].evaluate((e) => e.href);
+        info[j].categories.push({
+          name: categorie,
+          url: linkCat,
+          subcategories: [],
+        });
       }
     }
+
+    fs.writeFileSync('./data/walmart.json', JSON.stringify(info));
 
     await page.screenshot({ path: 'image.png', fullPage: true });
 
