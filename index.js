@@ -71,6 +71,15 @@ puppeteer
             name: subCat,
             url: linkSub,
           });
+
+          console.log(
+            'Departamento:',
+            dep.department,
+            '> Categoria ',
+            cat.name,
+            '> subcategoria',
+            subCat
+          );
         }
       }
     }
