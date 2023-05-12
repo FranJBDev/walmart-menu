@@ -1,0 +1,25 @@
+{
+  "name": "walmart-menu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranJBDev/walmart-menu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranJBDev/walmart-menu/issues"
+  },
+  "homepage": "https://github.com/FranJBDev/walmart-menu#readme",
+  "dependencies": {
+    "puppeteer": "^20.2.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  }
+}
